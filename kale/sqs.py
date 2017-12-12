@@ -49,10 +49,14 @@ class SQSTalk(object):
                     aws_secret_access_key=aws_secret_access_key)
             else:
                 # Used in staging and production
-                self._connections[conn_str] = boto.sqs.connect_to_region(
-                    aws_region,
-                    aws_access_key_id=aws_access_key_id,
-                    aws_secret_access_key=aws_secret_access_key)
+                if aws_access_key_id and aws_secret_access_key:
+                    self._connections[conn_str] = boto.sqs.connect_to_region(
+                        aws_region,
+                        aws_access_key_id=aws_access_key_id,
+                        aws_secret_access_key=aws_secret_access_key)
+                else:
+                    self._connections[conn_str] = boto.sqs.connect_to_region(
+                        aws_region)
 
         self._connection = self._connections[conn_str]
 
